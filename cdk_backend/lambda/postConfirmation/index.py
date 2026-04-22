@@ -18,7 +18,7 @@ def handler(event, context):
         DEFAULT_GROUP: {
             'custom:first_sign_in': 'true',
             'custom:total_files_uploaded': '0',
-            'custom:max_files_allowed': '8',
+            'custom:max_files_allowed': '15',
             'custom:max_pages_allowed': '10',
             'custom:max_size_allowed_MB': '25'
         },
