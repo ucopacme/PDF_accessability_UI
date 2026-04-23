@@ -32,6 +32,121 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { PDFBucket, region } from '../utilities/constants';
 
+/**
+ * Converts an accessibility report JSON to a styled HTML document string.
+ */
+function reportToHtml(report, label, fileName) {
+  if (!report) return '';
+
+  const summary = report.Summary || {};
+  const detailed = report['Detailed Report'] || {};
+  const categories = Object.keys(detailed);
+  const timestamp = new Date().toLocaleString();
+
+  const statusColor = (status) => {
+    if (status === 'Passed') return '#059669';
+    if (status === 'Failed') return '#dc2626';
+    return '#d97706';
+  };
+
+  const statusBg = (status) => {
+    if (status === 'Passed') return '#ecfdf5';
+    if (status === 'Failed') return '#fef2f2';
+    return '#fffbeb';
+  };
+
+  let detailedRows = '';
+  categories.forEach((category) => {
+    const items = detailed[category] || [];
+    detailedRows += `
+      <tr><td colspan="3" style="background:#f0f4f8;font-weight:700;padding:10px 12px;font-size:14px;color:#003262;">${category}</td></tr>`;
+    items.forEach((item) => {
+      detailedRows += `
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:13px;">${item.Rule || ''}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:13px;">${item.Description || ''}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:center;">
+          <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;color:${statusColor(item.Status)};background:${statusBg(item.Status)};">${item.Status || '—'}</span>
+        </td>
+      </tr>`;
+    });
+  });
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${label} Accessibility Report - ${fileName}</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; color: #1e293b; background: #fff; }
+  .header { background: #003262; color: #fff; padding: 24px 32px; }
+  .header h1 { margin: 0 0 4px 0; font-size: 20px; font-weight: 700; }
+  .header p { margin: 0; font-size: 13px; opacity: 0.7; }
+  .content { max-width: 900px; margin: 0 auto; padding: 24px 32px; }
+  .summary { display: flex; gap: 16px; margin-bottom: 32px; }
+  .summary-card { flex: 1; border-radius: 8px; padding: 16px; text-align: center; border: 1px solid #e5e7eb; }
+  .summary-card .value { font-size: 28px; font-weight: 700; }
+  .summary-card .label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+  table { width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
+  th { background: #003262; color: #fff; padding: 10px 12px; text-align: left; font-size: 13px; font-weight: 600; }
+  .footer { text-align: center; padding: 24px; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; margin-top: 32px; }
+  @media print { body { font-size: 11px; } .header { padding: 16px; } .content { padding: 16px; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>${label} Accessibility Report</h1>
+  <p>${fileName} &nbsp;·&nbsp; Generated ${timestamp} &nbsp;·&nbsp; Adobe Accessibility Checker</p>
+</div>
+<div class="content">
+  <h2 style="font-size:16px;color:#003262;margin-bottom:12px;">Summary</h2>
+  <div class="summary">
+    <div class="summary-card" style="border-color:#059669;">
+      <div class="value" style="color:#059669;">${summary.Passed ?? '—'}</div>
+      <div class="label">Passed</div>
+    </div>
+    <div class="summary-card" style="border-color:#dc2626;">
+      <div class="value" style="color:#dc2626;">${summary.Failed ?? '—'}</div>
+      <div class="label">Failed</div>
+    </div>
+    <div class="summary-card" style="border-color:#d97706;">
+      <div class="value" style="color:#d97706;">${summary['Needs manual check'] ?? '—'}</div>
+      <div class="label">Needs Manual Check</div>
+    </div>
+  </div>
+  ${summary.Description ? `<p style="font-size:13px;color:#6b7280;margin-bottom:24px;">${summary.Description}</p>` : ''}
+  <h2 style="font-size:16px;color:#003262;margin-bottom:12px;">Detailed Report</h2>
+  <table>
+    <thead><tr><th>Rule</th><th>Description</th><th style="text-align:center;">Status</th></tr></thead>
+    <tbody>${detailedRows}</tbody>
+  </table>
+</div>
+<div class="footer">
+  University of California Office of the President &nbsp;·&nbsp; PDF Accessibility Remediation Tool
+</div>
+</body>
+</html>`;
+}
+
+/**
+ * Triggers a download of an HTML string as a file.
+ */
+function downloadHtmlReport(report, label, fileName) {
+  const html = reportToHtml(report, label, fileName);
+  if (!html) return;
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const safeName = fileName.replace(/\.pdf$/i, '');
+  link.href = url;
+  link.download = `${safeName}_${label.toLowerCase()}_remediation_accessibility_report.html`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
 
 function AccessibilityChecker({ originalFileName, updatedFilename, awsCredentials, open, onClose }) {
 
@@ -375,7 +490,7 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
           Accessibility Reports (Results By Adobe Accessibility Checker)
         </Typography>
 
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
           {/* Download BEFORE JSON button */}
           <Button
             variant="outlined"
@@ -386,7 +501,20 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
             startIcon={isBeforeUrlLoading ? <CircularProgress size={14} /> : <DownloadIcon fontSize="small" />}
             sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
           >
-            Before Report
+            Before (JSON)
+          </Button>
+
+          {/* Download BEFORE HTML button */}
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            disabled={!beforeReport}
+            onClick={() => downloadHtmlReport(beforeReport, 'Before', originalFileName)}
+            startIcon={<DownloadIcon fontSize="small" />}
+            sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
+          >
+            Before (HTML)
           </Button>
 
           {/* Download AFTER JSON button */}
@@ -399,7 +527,20 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
             startIcon={isAfterUrlLoading ? <CircularProgress size={14} /> : <DownloadIcon fontSize="small" />}
             sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
           >
-            After Report
+            After (JSON)
+          </Button>
+
+          {/* Download AFTER HTML button */}
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            disabled={!afterReport}
+            onClick={() => downloadHtmlReport(afterReport, 'After', originalFileName)}
+            startIcon={<DownloadIcon fontSize="small" />}
+            sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
+          >
+            After (HTML)
           </Button>
 
           <IconButton onClick={handleClose} size="small">
