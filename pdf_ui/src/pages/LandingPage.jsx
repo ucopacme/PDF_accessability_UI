@@ -32,6 +32,9 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
+// Assets
+import ucopLogo from '../assets/ucop-logo.svg';
+
 // ─── UC Brand Colors (matching digitalaccessibility.ucop.edu) ────────────
 const UC_BLUE = '#003262';
 const UC_GOLD = '#FDB515';
@@ -90,23 +93,13 @@ const LandingPage = () => {
       >
         <Container maxWidth="lg" sx={{ py: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Typography
-              variant="body1"
-              component="a"
-              href="https://digitalaccessibility.ucop.edu"
-              target="_blank"
-              rel="noopener"
-              sx={{
-                color: '#fff',
-                textDecoration: 'none',
-                fontWeight: 700,
-                fontSize: '1rem',
-                letterSpacing: '0.3px',
-                '&:hover': { color: UC_GOLD },
-              }}
-            >
-              University of California Office of the President
-            </Typography>
+            <a href="https://digitalaccessibility.ucop.edu" target="_blank" rel="noopener noreferrer">
+              <img
+                src={ucopLogo}
+                alt="University of California Office of the President"
+                style={{ height: '40px', width: 'auto' }}
+              />
+            </a>
             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>|</Typography>
             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 400 }}>
               Digital Accessibility

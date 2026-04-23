@@ -17,6 +17,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
+// Assets
+import ucopLogo from '../assets/ucop-logo.svg';
+
 // ─── UC Brand Colors ─────────────────────────────────────────────────────
 const UC_BLUE = '#003262';
 const UC_GOLD = '#FDB515';
@@ -74,19 +77,11 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
             </IconButton>
           )}
 
-          <Typography
-            variant="body1"
-            component="h1"
-            sx={{
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: { xs: '0.85rem', sm: '1rem' },
-              letterSpacing: '0.3px',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            UCOP PDF Accessibility Remediation
-          </Typography>
+          <img
+            src={ucopLogo}
+            alt="University of California Office of the President"
+            style={{ height: isMobile ? '28px' : '36px', width: 'auto' }}
+          />
         </Box>
 
         {/* Right Side: Usage Count and Home Button */}
