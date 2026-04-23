@@ -39,6 +39,7 @@ const UC_LIGHT_BLUE = '#3B7EA1';
 const UC_DARK = '#00213F';
 const UC_WARM_GRAY = '#6C6C6C';
 const UC_BG_LIGHT = '#F7F7F7';
+const UC_CYAN = '#27DAF5';
 
 const LandingPage = () => {
   const auth = useAuth();
@@ -83,8 +84,8 @@ const LandingPage = () => {
       <Box
         component="header"
         sx={{
-          backgroundColor: UC_BLUE,
-          borderBottom: `4px solid ${UC_GOLD}`,
+          backgroundColor: UC_CYAN,
+          borderBottom: `3px solid ${UC_BLUE}`,
         }}
       >
         <Container maxWidth="lg" sx={{ py: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -96,18 +97,18 @@ const LandingPage = () => {
               target="_blank"
               rel="noopener"
               sx={{
-                color: '#fff',
+                color: UC_BLUE,
                 textDecoration: 'none',
                 fontWeight: 700,
                 fontSize: '1rem',
                 letterSpacing: '0.3px',
-                '&:hover': { color: UC_GOLD },
+                '&:hover': { color: UC_DARK },
               }}
             >
               University of California
             </Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>|</Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 400 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(0,50,98,0.3)' }}>|</Typography>
+            <Typography variant="body2" sx={{ color: UC_BLUE, fontWeight: 400, opacity: 0.7 }}>
               Digital Accessibility
             </Typography>
           </Box>
