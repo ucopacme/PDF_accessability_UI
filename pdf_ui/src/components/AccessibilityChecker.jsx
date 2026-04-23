@@ -31,6 +31,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { PDFBucket, region } from '../utilities/constants';
+import html2pdf from 'html2pdf.js';
 
 /**
  * Converts an accessibility report JSON to a styled HTML document string.
@@ -145,6 +146,39 @@ function downloadHtmlReport(report, label, fileName) {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+/**
+ * Converts the report to HTML, renders it offscreen, and saves as PDF.
+ */
+function downloadPdfReport(report, label, fileName) {
+  const html = reportToHtml(report, label, fileName);
+  if (!html) return;
+  const container = document.createElement('div');
+  container.innerHTML = html;
+  container.style.position = 'absolute';
+  container.style.left = '-9999px';
+  container.style.width = '800px';
+  document.body.appendChild(container);
+
+  const safeName = fileName.replace(/\.pdf$/i, '');
+  html2pdf()
+    .set({
+      margin: [10, 10, 10, 10],
+      filename: `${safeName}_${label.toLowerCase()}_remediation_accessibility_report.pdf`,
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+    })
+    .from(container)
+    .save()
+    .then(() => {
+      document.body.removeChild(container);
+    })
+    .catch(() => {
+      document.body.removeChild(container);
+    });
 }
 
 
@@ -517,6 +551,19 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
             Before (HTML)
           </Button>
 
+          {/* Download BEFORE PDF button */}
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            disabled={!beforeReport}
+            onClick={() => downloadPdfReport(beforeReport, 'Before', originalFileName)}
+            startIcon={<DownloadIcon fontSize="small" />}
+            sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
+          >
+            Before (PDF)
+          </Button>
+
           {/* Download AFTER JSON button */}
           <Button
             variant="outlined"
@@ -541,6 +588,19 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
             sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
           >
             After (HTML)
+          </Button>
+
+          {/* Download AFTER PDF button */}
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            disabled={!afterReport}
+            onClick={() => downloadPdfReport(afterReport, 'After', originalFileName)}
+            startIcon={<DownloadIcon fontSize="small" />}
+            sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
+          >
+            After (PDF)
           </Button>
 
           <IconButton onClick={handleClose} size="small">
