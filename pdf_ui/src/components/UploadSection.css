@@ -1,7 +1,10 @@
+/* ─── UC Brand Colors ─────────────────────────────────────────────────── */
+/* UC Blue: #003262  |  UC Gold: #FDB515  |  UC Light Blue: #3B7EA1 */
+
 .upload-container {
   background-color: #ffffff;
   border: 2px dashed #cbd5e1;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 40px;
   display: flex;
   flex-direction: column;
@@ -30,14 +33,6 @@
   }
 }
 
-@media (max-width: 360px) {
-  .upload-container {
-    padding: 8px;
-    margin: 0 2px;
-    max-width: 100%;
-  }
-}
-
 .upload-container-selected {
   display: flex;
   flex-direction: column;
@@ -58,18 +53,10 @@
   }
 }
 
-@media (max-width: 480px) {
-  .upload-container-selected {
-    max-width: 100%;
-    margin: 0 4px;
-    gap: 12px;
-  }
-}
-
 .upload-container-selected .upload-content {
   background-color: #ffffff;
   border: 2px dashed #cbd5e1;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 40px;
   display: flex;
   flex-direction: column;
@@ -87,13 +74,6 @@
   }
 }
 
-@media (max-width: 480px) {
-  .upload-container-selected .upload-content {
-    padding: 12px;
-    gap: 12px;
-  }
-}
-
 .upload-instructions {
   display: flex;
   flex-direction: column;
@@ -105,20 +85,18 @@
 }
 
 .upload-main-text {
-  font-family: 'Geist', sans-serif;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
-  color: #020617;
+  color: #003262;
   margin: 0;
 }
 
 .upload-sub-text {
-  font-family: 'Geist', sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
-  color: #475569;
+  color: #6C6C6C;
   margin: 0;
 }
 
@@ -141,14 +119,6 @@
 }
 
 @media (max-width: 480px) {
-  .upload-buttons {
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
-
   .change-format-btn,
   .upload-btn {
     width: 100%;
@@ -160,31 +130,29 @@
   flex: 1;
   background-color: #ffffff;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-family: 'Geist', sans-serif;
+  border-radius: 6px;
+  padding: 10px 20px;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
-  color: #020617;
+  color: #003262;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .change-format-btn:hover {
-  border-color: #8c1d40;
-  box-shadow: 0 2px 8px rgba(140, 29, 64, 0.1);
+  border-color: #003262;
+  background-color: #f7f7f7;
 }
 
 .upload-btn {
   flex: 1;
-  background-color: #8c1d40;
+  background-color: #003262;
   border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-family: 'Geist', sans-serif;
-  font-weight: 500;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
   font-size: 14px;
   line-height: 20px;
   color: #ffffff;
@@ -194,7 +162,7 @@
 }
 
 .upload-btn:hover {
-  background-color: #7a1a37;
+  background-color: #00213F;
 }
 
 .disclaimer {
@@ -206,21 +174,20 @@
 }
 
 .disclaimer p {
-  font-family: 'Geist', sans-serif;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  color: #475569;
+  font-size: 13px;
+  line-height: 20px;
+  color: #6C6C6C;
   text-align: center;
   margin: 0;
-  width: 480px;
+  max-width: 480px;
+  font-style: italic;
 }
 
 @media (max-width: 768px) {
   .disclaimer p {
     width: 100%;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 12px;
   }
 }
 
@@ -239,11 +206,10 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  font-family: 'Geist', sans-serif;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
-  color: #475569;
+  color: #6C6C6C;
 }
 
 .file-name {
@@ -267,7 +233,7 @@
 
 .progress-fill {
   height: 100%;
-  background-color: #8c1d40;
+  background-color: #003262;
   border-radius: 100px;
   transition: width 0.3s ease;
 }
@@ -275,13 +241,12 @@
 .change-file-btn {
   background-color: #ffffff;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-family: 'Geist', sans-serif;
+  border-radius: 6px;
+  padding: 10px 20px;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
-  color: #020617;
+  color: #003262;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -289,8 +254,8 @@
 }
 
 .change-file-btn:hover {
-  border-color: #8c1d40;
-  box-shadow: 0 2px 8px rgba(140, 29, 64, 0.1);
+  border-color: #003262;
+  background-color: #f7f7f7;
 }
 
 .upload-content {
@@ -305,7 +270,7 @@
 .upload-header {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
@@ -320,11 +285,10 @@
 }
 
 .upload-title h2 {
-  font-family: 'Geist', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 18px;
   line-height: 28px;
-  color: #020617;
+  color: #003262;
   text-align: center;
   margin: 0;
 }
@@ -333,7 +297,7 @@
   display: flex;
   flex-direction: row;
   gap: 16px;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   width: 100%;
 }
@@ -348,12 +312,12 @@
 .format-option {
   flex: 1;
   background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 16px;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   min-width: 0;
@@ -361,30 +325,21 @@
 }
 
 .format-option:hover {
-  border-color: #8c1d40;
-  box-shadow: 0 2px 8px rgba(140, 29, 64, 0.1);
+  border-color: #003262;
+  box-shadow: 0 2px 12px rgba(0, 50, 98, 0.08);
 }
 
 .format-option.selected {
-  border-color: #8c1d40;
-  box-shadow: 0 2px 8px rgba(140, 29, 64, 0.15);
-  background-color: #fef7f7;
-}
-
-.format-option.unavailable {
-  opacity: 0.7;
-  border-color: #e5e7eb;
-}
-
-.format-option.unavailable:hover {
-  border-color: #e5e7eb;
-  box-shadow: none;
+  border-color: #003262;
+  border-width: 2px;
+  box-shadow: 0 2px 12px rgba(0, 50, 98, 0.1);
+  background-color: rgba(0, 50, 98, 0.02);
 }
 
 .format-header {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
@@ -399,20 +354,18 @@
 }
 
 .format-name {
-  font-family: 'Geist', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
   line-height: 20px;
-  color: #020617;
+  color: #003262;
   white-space: nowrap;
 }
 
 .format-description {
-  font-family: 'Geist', sans-serif;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
-  color: #1e293b;
+  color: #6C6C6C;
   margin: 0;
   text-align: left;
 }
@@ -420,14 +373,13 @@
 .format-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
 }
 
 .format-status {
-  font-family: 'Geist', sans-serif;
-  font-weight: 500;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 11px;
   line-height: 16px;
 }
 
@@ -449,7 +401,6 @@
 }
 
 .upload-error p {
-  font-family: 'Geist', sans-serif;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -460,35 +411,38 @@
 
 .upload-btn:disabled,
 .change-file-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-.upload-btn:disabled:hover,
+.upload-btn:disabled:hover {
+  background-color: #003262;
+}
+
 .change-file-btn:disabled:hover {
-  background-color: #8c1d40;
   border-color: #cbd5e1;
+  background-color: #ffffff;
   box-shadow: none;
 }
 
 .troubleshooting-hint {
   margin-top: 12px;
   padding: 8px 12px;
-  background-color: #fef3c7;
-  border: 1px solid #f59e0b;
+  background-color: rgba(253, 181, 21, 0.1);
+  border: 1px solid #FDB515;
   border-radius: 6px;
 }
 
 .troubleshooting-hint p {
   margin: 0;
   font-size: 14px;
-  color: #92400e;
+  color: #003262;
 }
 
 .troubleshoot-link {
   background: none;
   border: none;
-  color: #8c1d40;
+  color: #003262;
   text-decoration: underline;
   cursor: pointer;
   font-size: 14px;
@@ -496,5 +450,5 @@
 }
 
 .troubleshoot-link:hover {
-  color: #7a1a37;
+  color: #3B7EA1;
 }
