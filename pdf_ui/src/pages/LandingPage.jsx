@@ -84,8 +84,8 @@ const LandingPage = () => {
       <Box
         component="header"
         sx={{
-          backgroundColor: UC_CYAN,
-          borderBottom: `3px solid ${UC_BLUE}`,
+          backgroundColor: UC_BLUE,
+          borderBottom: `4px solid ${UC_GOLD}`,
         }}
       >
         <Container maxWidth="lg" sx={{ py: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -97,18 +97,18 @@ const LandingPage = () => {
               target="_blank"
               rel="noopener"
               sx={{
-                color: UC_BLUE,
+                color: '#fff',
                 textDecoration: 'none',
                 fontWeight: 700,
                 fontSize: '1rem',
                 letterSpacing: '0.3px',
-                '&:hover': { color: UC_DARK },
+                '&:hover': { color: UC_GOLD },
               }}
             >
-              University of California
+              University of California Office of the President
             </Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(0,50,98,0.3)' }}>|</Typography>
-            <Typography variant="body2" sx={{ color: UC_BLUE, fontWeight: 400, opacity: 0.7 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>|</Typography>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 400 }}>
               Digital Accessibility
             </Typography>
           </Box>
@@ -118,8 +118,8 @@ const LandingPage = () => {
       {/* ─── Hero Section ─────────────────────────────────────────────── */}
       <Box
         sx={{
-          backgroundColor: UC_DARK,
-          color: '#fff',
+          backgroundColor: '#27B7F5',
+          color: '#161E4F',
           py: { xs: 6, md: 10 },
           position: 'relative',
           overflow: 'hidden',
@@ -133,7 +133,7 @@ const LandingPage = () => {
             right: 0,
             width: '40%',
             height: '100%',
-            background: `linear-gradient(135deg, transparent 0%, rgba(0,50,98,0.3) 100%)`,
+            background: `linear-gradient(135deg, transparent 0%, rgba(22,30,79,0.05) 100%)`,
             zIndex: 0,
           }}
         />
@@ -141,20 +141,6 @@ const LandingPage = () => {
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Grid container spacing={6} alignItems="center">
             <Grid item xs={12} md={7}>
-              <Typography
-                variant="overline"
-                sx={{
-                  color: UC_GOLD,
-                  fontWeight: 700,
-                  letterSpacing: '2px',
-                  fontSize: '0.8rem',
-                  mb: 2,
-                  display: 'block',
-                }}
-              >
-                UCOP INFORMATION TECHNOLOGY SERVICES
-              </Typography>
-
               <Typography
                 variant="h2"
                 component="h1"
@@ -166,7 +152,7 @@ const LandingPage = () => {
                 }}
               >
                 PDF Accessibility{' '}
-                <Box component="span" sx={{ color: UC_GOLD }}>
+                <Box component="span" sx={{ color: '#161E4F' }}>
                   Remediation
                 </Box>
               </Typography>
@@ -177,7 +163,7 @@ const LandingPage = () => {
                 sx={{
                   fontWeight: 400,
                   mb: 3,
-                  color: 'rgba(255,255,255,0.85)',
+                  color: 'rgba(22,30,79,0.75)',
                   lineHeight: 1.7,
                   maxWidth: '560px',
                   fontSize: { xs: '1rem', md: '1.15rem' },
@@ -220,10 +206,10 @@ const LandingPage = () => {
                   href="#"
                   onClick={(e) => { e.preventDefault(); setOpenDialog(true); }}
                   sx={{
-                    color: 'rgba(255,255,255,0.7)',
+                    color: 'rgba(22,30,79,0.6)',
                     textDecoration: 'none',
                     fontSize: '0.9rem',
-                    '&:hover': { color: UC_GOLD },
+                    '&:hover': { color: '#161E4F' },
                   }}
                 >
                   How it works →
@@ -235,13 +221,13 @@ const LandingPage = () => {
             <Grid item xs={12} md={5}>
               <Box
                 sx={{
-                  backgroundColor: 'rgba(255,255,255,0.06)',
+                  backgroundColor: 'rgba(22,30,79,0.06)',
                   borderRadius: '12px',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(22,30,79,0.12)',
                   p: 4,
                 }}
               >
-                <Typography variant="overline" sx={{ color: UC_GOLD, letterSpacing: '1.5px', fontWeight: 600 }}>
+                <Typography variant="overline" sx={{ color: '#161E4F', letterSpacing: '1.5px', fontWeight: 600 }}>
                   WHAT THIS TOOL DOES
                 </Typography>
                 {[
@@ -251,8 +237,8 @@ const LandingPage = () => {
                   { icon: <SecurityIcon />, text: 'Before & after accessibility audit reports' },
                 ].map((item, i) => (
                   <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 2.5 }}>
-                    <Box sx={{ color: UC_GOLD, display: 'flex' }}>{item.icon}</Box>
-                    <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.85)' }}>
+                    <Box sx={{ color: '#161E4F', display: 'flex' }}>{item.icon}</Box>
+                    <Typography variant="body1" sx={{ color: 'rgba(22,30,79,0.85)' }}>
                       {item.text}
                     </Typography>
                   </Box>
@@ -448,7 +434,7 @@ const LandingPage = () => {
               {
                 title: 'Source Code on GitHub',
                 desc: 'This tool is built on open-source technology. View and contribute to the project.',
-                href: 'https://github.com/ASUCICREPO/PDF_Accessibility',
+                href: 'https://github.com/ucopacme/PDF_Accessibility',
               },
             ].map((item, i) => (
               <Grid item xs={12} md={4} key={i}>
@@ -519,7 +505,7 @@ const LandingPage = () => {
         <Container maxWidth="lg" sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
           <Box>
             <Typography variant="body2" sx={{ fontWeight: 500, color: '#fff' }}>
-              University of California
+              University of California Office of the President
             </Typography>
             <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>
               Office of the President &nbsp;·&nbsp; Information Technology Services
