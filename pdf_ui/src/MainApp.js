@@ -217,7 +217,7 @@ function MainApp({ isLoggingOut, setIsLoggingOut }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ minHeight: '100vh', backgroundColor: '#f4f6f8' }}>
+      <Box sx={{ minHeight: '100vh', backgroundColor: '#EDF3F7' }}>
         <LeftNav 
           isCollapsed={isNavCollapsed} 
           setIsCollapsed={setIsNavCollapsed}

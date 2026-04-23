@@ -13,52 +13,54 @@ import {
   useTheme
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { HEADER_BACKGROUND } from '../utilities/constants';
-import logo from '../assets/pdf-accessability-logo.svg';
 import MenuIcon from '@mui/icons-material/Menu';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
+// ─── UC Brand Colors ─────────────────────────────────────────────────────
+const UC_BLUE = '#003262';
+const UC_GOLD = '#FDB515';
 
 function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usageError, loadingUsage, onMenuClick }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [usageExpanded, setUsageExpanded] = useState(false);
   
-  // Compute usage visually
   const usagePercentage = maxFilesAllowed > 0 ? Math.min((usageCount / maxFilesAllowed) * 100, 100) : 0;
 
-  // Determine progress bar color based on usage
   const getProgressBarColor = () => {
-    if (usagePercentage < 50) return '#66bb6a'; // Green
-    if (usagePercentage < 80) return '#ffa726'; // Orange
-    return '#ef5350'; // Red
+    if (usagePercentage < 50) return '#66bb6a';
+    if (usagePercentage < 80) return '#ffa726';
+    return '#ef5350';
   };
 
-  // Format numbers for better readability
-  const formatNumber = (num) => {
-    return num.toLocaleString();
-  };
-
-  const toggleUsageExpanded = () => {
-    setUsageExpanded(!usageExpanded);
-  };
+  const formatNumber = (num) => num.toLocaleString();
 
   return (
-    <AppBar position="static" color={HEADER_BACKGROUND} role="banner" aria-label="Application Header">
+    <AppBar
+      position="static"
+      role="banner"
+      aria-label="Application Header"
+      elevation={0}
+      sx={{
+        backgroundColor: UC_BLUE,
+        borderBottom: `3px solid ${UC_GOLD}`,
+      }}
+    >
       <Toolbar sx={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center',
         flexWrap: 'nowrap',
         minHeight: { xs: 56, sm: 64 },
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}>
         
-        {/* Left Side: Menu Button (mobile) + App Title with Logo */}
+        {/* Left Side: Menu Button (mobile) + UCOP Title */}
         <Box sx={{ 
           display: 'flex', 
           alignItems: 'center', 
-          gap: { xs: 1, sm: 2 },
+          gap: { xs: 1, sm: 1.5 },
           flex: '0 0 auto',
           minWidth: 0
         }}>
@@ -67,22 +69,25 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
               color="inherit"
               aria-label="open navigation menu"
               onClick={onMenuClick}
-              sx={{ mr: 1 }}
+              sx={{ mr: 0.5 }}
             >
               <MenuIcon />
             </IconButton>
           )}
           
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            <img
-              src={logo}
-              alt="PDF Accessibility Logo"
-              style={{ 
-                height: isMobile ? '32px' : '40px', 
-                width: 'auto' 
-              }}
-            />
-          </Box>
+          <Typography
+            variant="body1"
+            component="h1"
+            sx={{
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: { xs: '0.85rem', sm: '1rem' },
+              letterSpacing: '0.3px',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            UCOP PDF Accessibility Remediation
+          </Typography>
         </Box>
 
         {/* Right Side: Usage Count and Home Button */}
@@ -91,11 +96,11 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
           alignItems: 'center', 
           gap: { xs: 0.5, sm: 2 },
           flexWrap: 'nowrap',
-          minWidth: 0, // Allow shrinking
-          flex: '0 0 auto' // Don't grow or shrink
+          minWidth: 0,
+          flex: '0 0 auto'
         }}>
           
-          {/* Display usage + progress bar */}
+          {/* Usage display */}
           {isMobile ? (
             <Box sx={{ 
               display: 'flex', 
@@ -108,6 +113,7 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
                 variant="body2" 
                 sx={{ 
                   fontSize: '0.7rem',
+                  color: 'rgba(255,255,255,0.85)',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -115,17 +121,17 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
                 }}
               >
                 {loadingUsage
-                  ? 'Checking...'
+                  ? '...'
                   : usageError
                     ? 'Error'
                     : `${formatNumber(usageCount)}/${formatNumber(maxFilesAllowed)}`}
               </Typography>
               <IconButton
                 size="small"
-                onClick={toggleUsageExpanded}
+                onClick={() => setUsageExpanded(!usageExpanded)}
                 aria-label={usageExpanded ? 'Hide usage details' : 'Show usage details'}
                 sx={{ 
-                  color: 'inherit', 
+                  color: 'rgba(255,255,255,0.7)', 
                   p: 0.25,
                   minWidth: 24,
                   minHeight: 24,
@@ -138,18 +144,17 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
             </Box>
           ) : (
             <Box sx={{ 
-              minWidth: { xs: 150, sm: 200 },
-              maxWidth: { xs: 180, sm: 250 },
+              minWidth: 180,
+              maxWidth: 220,
               flex: '0 0 auto'
             }}>
               <Typography 
                 variant="body2" 
                 sx={{ 
                   mb: 0.5,
-                  fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                  fontSize: '0.8rem',
+                  color: 'rgba(255,255,255,0.85)',
                   whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
                 }}
               >
                 {loadingUsage
@@ -164,8 +169,9 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
                   variant="determinate"
                   value={usagePercentage}
                   sx={{
-                    height: 6,
+                    height: 5,
                     borderRadius: '3px',
+                    backgroundColor: 'rgba(255,255,255,0.15)',
                     '& .MuiLinearProgress-bar': {
                       backgroundColor: getProgressBarColor(), 
                     },
@@ -180,60 +186,32 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
             </Box>
           )}
 
-          {/* Optional: "Refresh Usage" button */}
-          {/* Uncomment the button below if you want to allow manual refreshing from the header */}
-          {/*
-          <Button
-            onClick={refreshUsage}
-            variant="contained"
-            disabled={loadingUsage}
-            sx={{
-              textTransform: 'none',
-              backgroundColor: '#1976d2',
-              '&:hover': {
-                backgroundColor: '#125b9d'
-              }
-            }}
-          >
-            Refresh Usage
-          </Button>
-          */}
-
           {/* Home Button */}
           <Button
             onClick={handleSignOut}
             variant="outlined"
             size={isMobile ? 'small' : 'medium'}
             sx={{
-              borderColor: '#1976d2',
-              color: '#1976d2',
-              padding: isMobile ? '2px 6px' : '6px 16px',
-              borderRadius: '4px',
-              fontSize: isMobile ? '0.6rem' : '0.875rem',
-              minHeight: isMobile ? 32 : 40,
-              maxHeight: isMobile ? 32 : 40,
-              minWidth: isMobile ? 45 : 'auto',
-              maxWidth: isMobile ? 45 : 'auto',
-              height: isMobile ? 32 : 40,
+              borderColor: 'rgba(255,255,255,0.4)',
+              color: '#fff',
+              padding: isMobile ? '4px 10px' : '6px 16px',
+              borderRadius: '6px',
+              fontSize: isMobile ? '0.7rem' : '0.85rem',
+              fontWeight: 600,
+              minHeight: isMobile ? 32 : 38,
+              height: isMobile ? 32 : 38,
               flex: '0 0 auto',
               whiteSpace: 'nowrap',
-              transform: 'scale(1)',
-              zoom: 1,
+              textTransform: 'none',
               '&:hover': {
-                backgroundColor: 'rgba(25, 118, 210, 0.1)',
-                borderColor: '#1565c0',
-                transform: 'scale(1)',
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                borderColor: 'rgba(255,255,255,0.6)',
               },
-              '&:focus': {
-                outline: 'none',
-                boxShadow: '0 0 4px rgba(25, 118, 210, 0.5)',
-                transform: 'scale(1)',
-              },
-              transition: 'all 0.3s ease-in-out',
+              transition: 'all 0.2s ease',
             }}
             aria-label="Home Button"
           >
-            {isMobile ? 'Home' : 'Home'}
+            Home
           </Button>
         </Box>
       </Toolbar>
@@ -241,8 +219,8 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
       {/* Mobile Usage Details */}
       {isMobile && (
         <Collapse in={usageExpanded}>
-          <Box sx={{ p: 2, backgroundColor: 'rgba(0, 0, 0, 0.1)' }}>
-            <Typography variant="body2" sx={{ mb: 1 }}>
+          <Box sx={{ px: 2, py: 1.5, backgroundColor: 'rgba(0,0,0,0.15)' }}>
+            <Typography variant="body2" sx={{ mb: 1, color: 'rgba(255,255,255,0.85)', fontSize: '0.8rem' }}>
               {loadingUsage
                 ? 'Checking usage...'
                 : usageError
@@ -255,8 +233,9 @@ function Header({ handleSignOut, usageCount, maxFilesAllowed, refreshUsage, usag
                 variant="determinate"
                 value={usagePercentage}
                 sx={{
-                  height: 6,
+                  height: 5,
                   borderRadius: '3px',
+                  backgroundColor: 'rgba(255,255,255,0.15)',
                   '& .MuiLinearProgress-bar': {
                     backgroundColor: getProgressBarColor(), 
                   },
