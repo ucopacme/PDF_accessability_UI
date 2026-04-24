@@ -637,19 +637,6 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
             Before (JSON)
           </Button>
 
-          {/* Download BEFORE HTML button */}
-          <Button
-            variant="outlined"
-            color="secondary"
-            size="small"
-            disabled={!beforeReport}
-            onClick={() => downloadHtmlReport(beforeReport, 'Before', originalFileName)}
-            startIcon={<DownloadIcon fontSize="small" />}
-            sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
-          >
-            Before (HTML)
-          </Button>
-
           {/* Download AFTER JSON button */}
           <Button
             variant="outlined"
@@ -663,20 +650,7 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
             After (JSON)
           </Button>
 
-          {/* Download AFTER HTML button */}
-          <Button
-            variant="outlined"
-            color="secondary"
-            size="small"
-            disabled={!afterReport}
-            onClick={() => downloadHtmlReport(afterReport, 'After', originalFileName)}
-            startIcon={<DownloadIcon fontSize="small" />}
-            sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
-          >
-            After (HTML)
-          </Button>
-
-          {/* Download Combined Comparison HTML button */}
+          {/* Download Combined Before/After HTML button */}
           <Button
             variant="contained"
             size="small"
@@ -685,7 +659,7 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
             startIcon={<DownloadIcon fontSize="small" />}
             sx={{ fontSize: '0.75rem', padding: '4px 8px', backgroundColor: '#003262', '&:hover': { backgroundColor: '#00213F' } }}
           >
-            Comparison (HTML)
+            Combined Before/After (HTML)
           </Button>
 
           <IconButton onClick={handleClose} size="small">
