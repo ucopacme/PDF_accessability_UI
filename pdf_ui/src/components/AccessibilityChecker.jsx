@@ -147,6 +147,139 @@ function downloadHtmlReport(report, label, fileName) {
   URL.revokeObjectURL(url);
 }
 
+/**
+ * Generates a combined Before vs After comparison HTML report.
+ */
+function downloadCombinedHtmlReport(beforeReport, afterReport, fileName) {
+  if (!beforeReport || !afterReport) return;
+
+  const beforeSummary = beforeReport.Summary || {};
+  const afterSummary = afterReport.Summary || {};
+  const beforeDetailed = beforeReport['Detailed Report'] || {};
+  const afterDetailed = afterReport['Detailed Report'] || {};
+  const timestamp = new Date().toLocaleString();
+
+  const statusColor = (status) => {
+    if (status === 'Passed') return '#059669';
+    if (status === 'Failed') return '#dc2626';
+    return '#d97706';
+  };
+  const statusBg = (status) => {
+    if (status === 'Passed') return '#ecfdf5';
+    if (status === 'Failed') return '#fef2f2';
+    return '#fffbeb';
+  };
+  const badge = (status) =>
+    `<span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;color:${statusColor(status)};background:${statusBg(status)};">${status || '—'}</span>`;
+
+  // Build detailed comparison rows
+  const allCategories = new Set([...Object.keys(beforeDetailed), ...Object.keys(afterDetailed)]);
+  let detailedRows = '';
+  allCategories.forEach((category) => {
+    detailedRows += `<tr><td colspan="4" style="background:#f0f4f8;font-weight:700;padding:10px 12px;font-size:14px;color:#003262;">${category}</td></tr>`;
+    const beforeItems = beforeDetailed[category] || [];
+    const afterItems = afterDetailed[category] || [];
+    const afterMap = {};
+    afterItems.forEach((item) => { afterMap[item.Rule] = item; });
+    const allRules = new Set([...beforeItems.map(i => i.Rule), ...afterItems.map(i => i.Rule)]);
+
+    allRules.forEach((rule) => {
+      const b = beforeItems.find(i => i.Rule === rule);
+      const a = afterMap[rule];
+      const changed = b && a && b.Status !== a.Status;
+      const rowBg = changed ? 'background:#f0fdf4;' : '';
+      detailedRows += `
+      <tr style="${rowBg}">
+        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:13px;">${rule}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:13px;">${a ? a.Description : (b ? b.Description : '')}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:center;">${badge(b ? b.Status : '—')}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:center;">${badge(a ? a.Status : '—')}</td>
+      </tr>`;
+    });
+  });
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility Comparison Report - ${fileName}</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; color: #1e293b; background: #fff; }
+  .header { background: #003262; color: #fff; padding: 24px 32px; }
+  .header h1 { margin: 0 0 4px 0; font-size: 20px; font-weight: 700; }
+  .header p { margin: 0; font-size: 13px; opacity: 0.7; }
+  .content { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+  .summary-grid { display: flex; gap: 24px; margin-bottom: 32px; }
+  .summary-box { flex: 1; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
+  .summary-box h3 { margin: 0 0 12px 0; font-size: 15px; color: #003262; }
+  .summary-row { display: flex; gap: 12px; }
+  .summary-card { flex: 1; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; }
+  .summary-card .value { font-size: 24px; font-weight: 700; }
+  .summary-card .label { font-size: 11px; color: #6b7280; margin-top: 2px; }
+  table { width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
+  th { background: #003262; color: #fff; padding: 10px 12px; text-align: left; font-size: 13px; font-weight: 600; }
+  .improved { background: #f0fdf4; }
+  .legend { display: flex; gap: 16px; margin-bottom: 16px; font-size: 12px; color: #6b7280; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+  .footer { text-align: center; padding: 24px; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; margin-top: 32px; }
+  @media print { body { font-size: 11px; } .header { padding: 16px; } .content { padding: 16px; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Accessibility Comparison Report</h1>
+  <p>${fileName} &nbsp;·&nbsp; Generated ${timestamp} &nbsp;·&nbsp; Before vs After Remediation</p>
+</div>
+<div class="content">
+  <h2 style="font-size:16px;color:#003262;margin-bottom:12px;">Summary Comparison</h2>
+  <div class="summary-grid">
+    <div class="summary-box">
+      <h3>Before Remediation</h3>
+      <div class="summary-row">
+        <div class="summary-card" style="border-color:#059669;"><div class="value" style="color:#059669;">${beforeSummary.Passed ?? '—'}</div><div class="label">Passed</div></div>
+        <div class="summary-card" style="border-color:#dc2626;"><div class="value" style="color:#dc2626;">${beforeSummary.Failed ?? '—'}</div><div class="label">Failed</div></div>
+        <div class="summary-card" style="border-color:#d97706;"><div class="value" style="color:#d97706;">${beforeSummary['Needs manual check'] ?? '—'}</div><div class="label">Manual Check</div></div>
+      </div>
+    </div>
+    <div class="summary-box">
+      <h3>After Remediation</h3>
+      <div class="summary-row">
+        <div class="summary-card" style="border-color:#059669;"><div class="value" style="color:#059669;">${afterSummary.Passed ?? '—'}</div><div class="label">Passed</div></div>
+        <div class="summary-card" style="border-color:#dc2626;"><div class="value" style="color:#dc2626;">${afterSummary.Failed ?? '—'}</div><div class="label">Failed</div></div>
+        <div class="summary-card" style="border-color:#d97706;"><div class="value" style="color:#d97706;">${afterSummary['Needs manual check'] ?? '—'}</div><div class="label">Manual Check</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="font-size:16px;color:#003262;margin-bottom:8px;">Detailed Comparison</h2>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#f0fdf4;border:1px solid #bbf7d0;"></div> Status improved</div>
+  </div>
+  <table>
+    <thead><tr><th>Rule</th><th>Description</th><th style="text-align:center;">Before</th><th style="text-align:center;">After</th></tr></thead>
+    <tbody>${detailedRows}</tbody>
+  </table>
+</div>
+<div class="footer">
+  University of California Office of the President &nbsp;·&nbsp; PDF Accessibility Remediation Tool
+</div>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const safeName = fileName.replace(/\.pdf$/i, '');
+  link.href = url;
+  link.download = `${safeName}_accessibility_comparison_report.html`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
 
 function AccessibilityChecker({ originalFileName, updatedFilename, awsCredentials, open, onClose }) {
 
@@ -541,6 +674,18 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
             sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
           >
             After (HTML)
+          </Button>
+
+          {/* Download Combined Comparison HTML button */}
+          <Button
+            variant="contained"
+            size="small"
+            disabled={!beforeReport || !afterReport}
+            onClick={() => downloadCombinedHtmlReport(beforeReport, afterReport, originalFileName)}
+            startIcon={<DownloadIcon fontSize="small" />}
+            sx={{ fontSize: '0.75rem', padding: '4px 8px', backgroundColor: '#003262', '&:hover': { backgroundColor: '#00213F' } }}
+          >
+            Comparison (HTML)
           </Button>
 
           <IconButton onClick={handleClose} size="small">
