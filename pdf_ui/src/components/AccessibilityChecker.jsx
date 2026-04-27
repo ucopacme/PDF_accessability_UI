@@ -652,14 +652,15 @@ const generatePresignedUrl = useCallback(async (key, filename) => {
 
           {/* Download Combined Before/After HTML button */}
           <Button
-            variant="contained"
+            variant="outlined"
+            color="primary"
             size="small"
             disabled={!beforeReport || !afterReport}
             onClick={() => downloadCombinedHtmlReport(beforeReport, afterReport, originalFileName)}
             startIcon={<DownloadIcon fontSize="small" />}
-            sx={{ fontSize: '0.75rem', padding: '4px 8px', backgroundColor: '#003262', '&:hover': { backgroundColor: '#00213F' } }}
+            sx={{ fontSize: '0.75rem', padding: '4px 8px' }}
           >
-            Combined Before/After (HTML)
+            Before/After (HTML)
           </Button>
 
           <IconButton onClick={handleClose} size="small">
